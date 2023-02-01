@@ -1,0 +1,320 @@
+{
+	"info": {
+		"_postman_id": "9aa0b381-5966-4f0a-ae1f-27cc52d9e86f",
+		"name": "GitHub_API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25625500"
+	},
+	"item": [
+		{
+			"name": "Issues",
+			"item": [
+				{
+					"name": "GET",
+					"item": [
+						{
+							"name": "GET_Single_Issue",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Check status code\", function() {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"check issue number\", function () {\r",
+											"    const body = pm.response.json();\r",
+											"    pm.expect(body.number, \"Number property\").to.be.equal(1);\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://api.github.com/repos/dianadilova/postman/issues/1\n",
+									"protocol": "https",
+									"host": [
+										"api",
+										"github",
+										"com"
+									],
+									"path": [
+										"repos",
+										"dianadilova",
+										"postman",
+										"issues",
+										"1\n"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get_Single_Issue_Label",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://api.github.com/repos/dianadilova/postman/issues/1/labels",
+									"protocol": "https",
+									"host": [
+										"api",
+										"github",
+										"com"
+									],
+									"path": [
+										"repos",
+										"dianadilova",
+										"postman",
+										"issues",
+										"1",
+										"labels"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET_All_Issues",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Check if response is array of issues\", function() {\r",
+											"const body = pm.response.json();\r",
+											"console.log(\"BODY\", \"body\");\r",
+											"    pm.expect(Array.isArray(body));\r",
+											"\r",
+											"for (let item of body) {\r",
+											"    pm.expect(typeof(item.title)).equals(\"string\");\r",
+											"    pm.expect(typeof(item.number)).equal(\"number\")\r",
+											"    pm.expect(item.number, \"issue number property\").is.greaterThan(0);\r",
+											"\r",
+											"}\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://api.github.com/repos/dianadilova/postman/issues",
+									"protocol": "https",
+									"host": [
+										"api",
+										"github",
+										"com"
+									],
+									"path": [
+										"repos",
+										"dianadilova",
+										"postman",
+										"issues"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "POST",
+					"item": [
+						{
+							"name": "Create_Issue",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"check issue number and title\"), function() {\r",
+											"let body = pm.response.json();\r",
+											"\r",
+											"pm.expect(body.number, \"Number property\").greaterThan(0);\r",
+											"pm.expect(body.title, \"Title property\").equals(\"issue from Postman 3\");\r",
+											"}"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "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",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "DianaDilova",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"title\": \"Fourth issue\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://api.github.com/repos/dianadilova/postman/issues",
+									"protocol": "https",
+									"host": [
+										"api",
+										"github",
+										"com"
+									],
+									"path": [
+										"repos",
+										"dianadilova",
+										"postman",
+										"issues"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create_Issue-With_labels",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "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",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "DianaDilova",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"title\" : \"Issue with labels\",\r\n    \"labels\" : [\"Bug\", \"priority:critical\", \"moq label\"]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://api.github.com/repos/dianadilova/postman/issues",
+									"protocol": "https",
+									"host": [
+										"api",
+										"github",
+										"com"
+									],
+									"path": [
+										"repos",
+										"dianadilova",
+										"postman",
+										"issues"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Repos",
+			"item": [
+				{
+					"name": "GET",
+					"item": [
+						{
+							"name": "GET_All_Repos",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://api.github.com/users/dianadilova/repos",
+									"protocol": "https",
+									"host": [
+										"api",
+										"github",
+										"com"
+									],
+									"path": [
+										"users",
+										"dianadilova",
+										"repos"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET_Single_Repo",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\"), function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Check repo name\", function () {\r",
+											"    const body = pm.response.json();\r",
+											"    pm.expect(body.name, \"Name property\").equals(\"postman\");\r",
+											"})\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://api.github.com/repos/dianadilova/Postman",
+									"protocol": "https",
+									"host": [
+										"api",
+										"github",
+										"com"
+									],
+									"path": [
+										"repos",
+										"dianadilova",
+										"Postman"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	]
+}
